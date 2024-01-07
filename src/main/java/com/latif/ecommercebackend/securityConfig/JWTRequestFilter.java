@@ -32,9 +32,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     // very time there is a request, it will come to this method
     //  first we need to check, does it have the header "Authorization", does it start with Bearer keyword
     // then if it does, we need to break the substring the Bearer token and then decode the token and the username
-    // and then we check if that username is available in repository
+    // then we check if that username is available in repository
     // if it is, then we need to build the authentication object of that user
-    // set details so that spring security and spring MVC knows about it
+    // We to set details so that spring security and spring MVC knows about it
 
 
     @Override

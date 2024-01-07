@@ -40,4 +40,10 @@ public class JwtServiceImpl implements JwtService {
                 .withIssuer(issuer)
                 .sign(algorithm);
     }
+
+    // extract username from token
+    @Override
+    public String getUsername(String token) {
+        return JWT.decode(token).getClaim(USERNAME_KEY).asString();
+    }
 }

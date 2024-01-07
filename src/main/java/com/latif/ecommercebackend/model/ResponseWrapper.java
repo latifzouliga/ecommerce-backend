@@ -16,6 +16,6 @@ public class ResponseWrapper {
     private boolean success;
     private HttpStatus status;
     private String message;
-    private Object body;
+    private Object data;
 
 }

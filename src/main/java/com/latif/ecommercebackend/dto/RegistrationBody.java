@@ -1,5 +1,8 @@
 package com.latif.ecommercebackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,6 +12,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RegistrationBody {
 
     @NotNull
@@ -22,6 +27,7 @@ public class RegistrationBody {
     @Size(min = 6, max = 36)
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     @NotBlank
     @Size(min = 6, max = 255)

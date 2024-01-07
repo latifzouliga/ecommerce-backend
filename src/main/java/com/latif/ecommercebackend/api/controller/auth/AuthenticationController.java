@@ -1,5 +1,7 @@
 package com.latif.ecommercebackend.api.controller.auth;
 
+import com.latif.ecommercebackend.dto.LoginBody;
+import com.latif.ecommercebackend.dto.LoginResponse;
 import com.latif.ecommercebackend.dto.RegistrationBody;
 import com.latif.ecommercebackend.exceptions.EcommerceProjectException;
 import com.latif.ecommercebackend.model.ResponseWrapper;
@@ -33,9 +35,23 @@ public class AuthenticationController {
                                 .success(true)
                                 .status(HttpStatus.CREATED)
                                 .message("User registration successful")
-                                .body(user)
+                                .data(user)
                                 .build()
                 );
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody) throws EcommerceProjectException {
+
+        String jwt = userService.LoginUser(loginBody);
+
+        if (jwt == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        LoginResponse response = new LoginResponse();
+        response.setJwt(jwt);
+        return ResponseEntity.ok(response);
 
     }
 }

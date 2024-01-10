@@ -1,5 +1,6 @@
 package com.latif.ecommercebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,25 +10,28 @@ import lombok.Setter;
 @Entity
 @Table(name = "address")
 public class Address {
+    /** Unique id for the address. */
     @Id
-    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(nullable = false, length = 550)
+    /** The first line of address. */
+//    @Column(name = "address_line_1", nullable = false, length = 512)
     private String addressLine1;
-
-
+    /** The second line of address. */
+//    @Column(name = "address_line_2", length = 512)
     private String addressLine2;
-
-    @Column(nullable = false)
+    /** The city of the address. */
+    @Column(name = "city", nullable = false)
     private String city;
-
-    @Column(nullable = false, length = 750)
+    /** The country of the address. */
+    @Column(name = "country", nullable = false, length = 75)
     private String country;
-
+    /** The user the address is associated with. */
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private LocalUser user;
+
 
 }

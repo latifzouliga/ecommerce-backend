@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,5 +32,8 @@ public class Product {
     /** The inventory of the product. */
     @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
     private Inventory inventory;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductReview> productReview;
 
 }

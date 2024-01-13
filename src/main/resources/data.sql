@@ -97,6 +97,32 @@ VALUES
     (36, 28),
     (37, 50);
 
+-- Generate random ratings and reviews for each product
+INSERT INTO product_reviews (product_id, rating, review)
+VALUES
+    (1, 'FIVE_STARS', 'Excellent wireless gaming mouse! Responsive and accurate.'),
+    (1, 'ONE_STAR', 'Excellent wireless gaming mouse! Responsive and accurate, but it needs to be updated'),
+    (2, 'FOUR_STARS', 'Great smart home hub, but could use more compatibility with certain devices.'),
+    (3, 'FIVE_STARS', 'Amazing ultra-thin laptop! Fast and lightweight.'),
+    (4, 'THREE_STARS', 'Decent mechanical gaming mousepad. Could be larger.'),
+    (5, 'FOUR_STARS', 'Smart Wi-Fi thermostat works well for controlling temperature.'),
+    (6, 'FIVE_STARS', 'HD webcam with microphone provides clear video and audio.'),
+    (7, 'FIVE_STARS', 'Multi-port USB-C hub is a lifesaver for my laptop.'),
+    (8, 'FOUR_STARS', 'Wireless charging pad is convenient and works flawlessly.'),
+    (9, 'THREE_STARS', 'Portable external battery pack is okay, but the capacity could be better.'),
+    (10, 'FIVE_STARS', 'Compact mechanical keyboard is a joy to type on.'),
+    (11, 'FOUR_STARS', 'Bluetooth in-ear earbuds deliver good sound quality.'),
+    (12, 'FIVE_STARS', 'HD graphics tablet is fantastic for digital art.'),
+    (13, 'FIVE_STARS', 'Smart LED desk lamp is adjustable and great for my workspace.'),
+    (14, 'FOUR_STARS', 'Noise-canceling over-ear headphones provide immersive audio.'),
+    (15, 'FIVE_STARS', 'Compact gaming PC delivers powerful gaming performance.'),
+    (16, 'FOUR_STARS', 'Smart plug set is convenient for home automation.'),
+    (17, 'FIVE_STARS', 'High-resolution laser printer prints fast and crisp documents.'),
+    (18, 'FOUR_STARS', 'External 2TB hard drive offers ample storage space.'),
+    (19, 'FIVE_STARS', 'Curved ultrawide monitor provides an immersive visual experience.'),
+    (20, 'FIVE_STARS', 'Wireless ergonomic mouse is comfortable for extended use.');
+
+
 
 INSERT INTO address (address_line1, city, country, user_id)
         VALUES ('123 Tester Hill', 'Testerton', 'England', 1),

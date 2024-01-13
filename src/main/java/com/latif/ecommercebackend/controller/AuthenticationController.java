@@ -23,6 +23,15 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
+    /*
+    {
+        "firstName": "latif",
+        "lastName": "zouli",
+        "email": "zoul@yallo.com",
+        "username": "latif",
+        "password": "Abc123"
+    }
+     */
     @PostMapping("/register")
     public ResponseEntity<ResponseWrapper> registerUser(@Valid @RequestBody RegistrationBody registrationBody) throws EcommerceProjectException {
 
@@ -40,6 +49,12 @@ public class AuthenticationController {
 
     }
 
+    /*
+    {
+        "username": "latif",
+        "password": "Abc1"
+     }
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody) throws EcommerceProjectException {
 

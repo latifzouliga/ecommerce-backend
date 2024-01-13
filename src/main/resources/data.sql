@@ -1,7 +1,7 @@
 
 insert into local_user(email_verified, email, password, first_name, last_name, username)
-values (false,'zouliga@yallo.com','$2a$10$PNo8Xwo44ivU7lXhVbw3d.2jVusPPajiqHs1tTM20g4IL/xeWhrr2','latif','zou','latif'),
-       (false,'hallo@yallo.com','$2a$10$PNo8Xwo44ivU7lXhVbw3d.2jVusPPajiqHs1tTM20g4IL/xeWhrr2','hallo','zou','hallo');
+values (false,'zoul@yallo.com','$2a$10$N1geJeRV7FXcYCobvGHU7.Tb5CoeZ7gRCCKhXBzQt7dPnEKYp1QFi','latif','zou','latif'),
+       (false,'hallo@yallo.com','$2a$10$N1geJeRV7FXcYCobvGHU7.Tb5CoeZ7gRCCKhXBzQt7dPnEKYp1QFi','hallo','zou','hallo');
 
 
         INSERT INTO product (name, short_description, long_description, price)
@@ -35,13 +35,13 @@ values (false,'zouliga@yallo.com','$2a$10$PNo8Xwo44ivU7lXhVbw3d.2jVusPPajiqHs1tT
         -- INSERT statements for web_order_quantities
 
         INSERT INTO web_order_quantities (order_id, product_id, quantity) VALUES
-                                                                              (1, 1, 5),
-         (1, 2, 5),
+         (3, 1, 5),
+         (3, 2, 5),
          (2, 3, 5),
          (2, 2, 5),
          (2, 5, 5),
-         (3, 3, 5),
-         (4, 4, 5),
-         (4, 2, 5),
+         (1, 3, 5),
+         (5, 4, 5),
          (5, 2, 5),
-         (5, 1, 5);
+         (4, 3, 5),
+         (4, 1, 5);

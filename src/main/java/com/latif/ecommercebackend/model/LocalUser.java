@@ -51,4 +51,7 @@ public class LocalUser {
     private Boolean emailVerified = false;
 
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
+
 }

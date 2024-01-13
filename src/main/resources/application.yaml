@@ -37,6 +37,11 @@ jwt:
   # expires in one week
   expiryInSeconds: 604800
 
+email:
+  from: no-reply@ecommerce.com
 
+app:
+  frontend:
+    url: http://ecommerce.com
 
 

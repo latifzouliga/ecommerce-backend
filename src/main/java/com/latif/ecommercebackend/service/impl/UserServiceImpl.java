@@ -3,15 +3,19 @@ package com.latif.ecommercebackend.service.impl;
 import com.latif.ecommercebackend.dto.LoginBody;
 import com.latif.ecommercebackend.dto.RegistrationBody;
 import com.latif.ecommercebackend.exceptions.EcommerceProjectException;
+import com.latif.ecommercebackend.exceptions.EmailFailureException;
 import com.latif.ecommercebackend.mapper.MapperUtil;
 import com.latif.ecommercebackend.model.LocalUser;
 
+import com.latif.ecommercebackend.model.VerificationToken;
 import com.latif.ecommercebackend.repository.LocalUserRepository;
+import com.latif.ecommercebackend.repository.VerificationTokenRepository;
 import com.latif.ecommercebackend.service.EncryptionService;
 import com.latif.ecommercebackend.service.JwtService;
 import com.latif.ecommercebackend.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -21,20 +25,26 @@ public class UserServiceImpl implements UserService {
     private final EncryptionService encryptionService;
     private final MapperUtil mapper;
     private final JwtService jwtService;
+    private final EmailServiceImpl emailService;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     public UserServiceImpl(LocalUserRepository userRepository,
                            EncryptionService encryptionService,
                            MapperUtil mapper,
-                           JwtService jwtService) {
+                           JwtService jwtService,
+                           EmailServiceImpl emailService,
+                           VerificationTokenRepository verificationTokenRepository) {
         this.userRepository = userRepository;
         this.encryptionService = encryptionService;
         this.mapper = mapper;
         this.jwtService = jwtService;
+        this.emailService = emailService;
+        this.verificationTokenRepository = verificationTokenRepository;
     }
 
 
     @Override
-    public RegistrationBody registerUser(RegistrationBody registrationBody) throws EcommerceProjectException {
+    public RegistrationBody registerUser(RegistrationBody registrationBody) throws EcommerceProjectException, EmailFailureException {
 
         if (userRepository.findByEmailIgnoreCase(registrationBody.email()).isPresent() ||
                 userRepository.findByUsernameIgnoreCase(registrationBody.username()).isPresent()
@@ -42,7 +52,7 @@ public class UserServiceImpl implements UserService {
             throw new EcommerceProjectException("User already exists");
         }
 
-        LocalUser localUser = mapper.convert(registrationBody, LocalUser.class);
+        LocalUser user = mapper.convert(registrationBody, LocalUser.class);
 
 //        LocalUser user = new LocalUser();
 //        user.setFirstName(registrationBody.getFirstName());
@@ -51,11 +61,23 @@ public class UserServiceImpl implements UserService {
 //        user.setUsername(registrationBody.getUsername());
 //        user.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
 
-        localUser.setPassword(encryptionService.encryptPassword(registrationBody.password()));
+        user.setPassword(encryptionService.encryptPassword(registrationBody.password()));
 
-        userRepository.save(localUser);
+        VerificationToken verificationToken = createVerificationToken(user);
+        emailService.sendVerificationEmail(verificationToken);
+//        verificationTokenRepository.save(verificationToken);
+        userRepository.save(user);
         return registrationBody;
 
+    }
+
+    private VerificationToken createVerificationToken(LocalUser user){
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(jwtService.generateVerifiedJWT(user));
+        verificationToken.setCreatedTimestamp(new Timestamp(System.currentTimeMillis()));
+        verificationToken.setUser(user);
+        user.getVerificationTokens().add(verificationToken);
+        return verificationToken;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.latif.ecommercebackend.model;
+package com.latif.ecommercebackend.enums;
 
 import lombok.Getter;
 

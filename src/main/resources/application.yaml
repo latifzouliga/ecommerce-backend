@@ -1,0 +1,42 @@
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce-backend
+    username: postgres
+    password: admin
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+
+  jackson:
+    serialization:
+      indent-output: true
+
+
+  application:
+      name: e-commerce
+
+encryption:
+  salt:
+    rounds: 10
+
+
+jwt:
+  algorithm:
+    key: SuperSecureKey134!
+  issuer: eCommerce
+  # expires in one week
+  expiryInSeconds: 604800
+
+
+
+

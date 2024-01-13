@@ -1,5 +1,7 @@
 package com.latif.ecommercebackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.latif.ecommercebackend.enums.Rating;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,9 @@ public class ProductReview {
     private String review;
 
     @ManyToOne
+    @JsonBackReference
     public Product product;
 
 }
+
+//https://fakeapi.platzi.com/

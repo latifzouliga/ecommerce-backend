@@ -29,7 +29,7 @@ public class OrderController {
                 ResponseWrapper.builder()
                         .status(HttpStatus.OK)
                         .success(true)
-                        .message("Orders for "+ user.getFirstName() + " "+ user.getLastName() + " retrieved successfully")
+                        .message("Orders for %s %s retrieved successfully".formatted(user.getFirstName(),user.getLastName()))
                         .data(orderService.getOrders(user))
                         .build()
         );

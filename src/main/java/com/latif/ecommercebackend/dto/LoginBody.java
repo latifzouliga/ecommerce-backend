@@ -6,17 +6,28 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-@Getter
+
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonIgnoreProperties(ignoreUnknown = true)
+//public class LoginBody {
+//
+//    @NotNull
+//    @NotBlank
+//    private String username;
+//
+//    @NotNull
+//    @NotBlank
+//    private String password;
+//
+//}
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LoginBody {
+public record LoginBody(
+        @NotNull
+        @NotBlank
+        String username,
 
-    @NotNull
-    @NotBlank
-    private String username;
-
-    @NotNull
-    @NotBlank
-    private String password;
-
+        @NotNull
+        @NotBlank
+        String password) {
 }

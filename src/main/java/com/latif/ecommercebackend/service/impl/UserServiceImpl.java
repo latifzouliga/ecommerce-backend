@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public RegistrationBody registerUser(RegistrationBody registrationBody) throws EcommerceProjectException {
 
-        if (userRepository.findByEmailIgnoreCase(registrationBody.getEmail()).isPresent() ||
-                userRepository.findByUsernameIgnoreCase(registrationBody.getUsername()).isPresent()
+        if (userRepository.findByEmailIgnoreCase(registrationBody.email()).isPresent() ||
+                userRepository.findByUsernameIgnoreCase(registrationBody.username()).isPresent()
         ) {
             throw new EcommerceProjectException("User already exists");
         }
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 //        user.setUsername(registrationBody.getUsername());
 //        user.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
 
-        localUser.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
+        localUser.setPassword(encryptionService.encryptPassword(registrationBody.password()));
 
         userRepository.save(localUser);
         return registrationBody;
@@ -62,12 +62,12 @@ public class UserServiceImpl implements UserService {
     public String LoginUser(LoginBody loginBody) throws EcommerceProjectException {
 
         // check if user exists in database
-        Optional<LocalUser> opUser = userRepository.findByUsernameIgnoreCase(loginBody.getUsername());
+        Optional<LocalUser> opUser = userRepository.findByUsernameIgnoreCase(loginBody.username());
 
         if (opUser.isPresent()) {
             LocalUser user = opUser.get();
             // verify login password is the same as the password in database
-            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
+            if (encryptionService.verifyPassword(loginBody.password(), user.getPassword())) {
                 return jwtService.generateJWT(user);
             }
         }

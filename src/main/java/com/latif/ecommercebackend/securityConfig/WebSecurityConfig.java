@@ -5,16 +5,34 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.AuthenticationFilter;
 
 
 @Configuration
 public class WebSecurityConfig {
 
+    private final JWTRequestFilter jwtRequestFilter;
+
+    public WebSecurityConfig(JWTRequestFilter jwtRequestFilter) {
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // check where the code is coming from, like is it the same front end
         http.csrf(AbstractHttpConfigurer::disable);
+        // only accepts requests from example.com
         http.cors(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+
+        // adding a filter in our case is jwtRequestFilter and this filter needs to be before AuthorizationFilter.class
+        // simply run jwtRequestFilter and then run any filter that is implementing AuthorizationFilter
+        http.addFilterBefore(jwtRequestFilter, AuthorizationFilter.class);
+
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/product","/auth/register","/auth/login").permitAll()
+                .anyRequest().authenticated());
+
         return http.build();
     }
 }

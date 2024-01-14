@@ -1,6 +1,6 @@
-server:
-  servlet:
-    context-path: /api/v1
+#server:
+#  servlet:
+#    context-path: /api/v1
 
 spring:
   datasource:
@@ -25,6 +25,14 @@ spring:
   application:
       name: e-commerce
 
+# SMTP Contiguration, how spring connects to SMTP
+  mail:
+    host: localhost
+    port: 2525
+#    password:
+#    username:
+
+
 encryption:
   salt:
     rounds: 10
@@ -43,5 +51,6 @@ email:
 app:
   frontend:
     url: http://ecommerce.com
+
 
 

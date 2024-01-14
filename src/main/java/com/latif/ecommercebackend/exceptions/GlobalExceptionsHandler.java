@@ -1,6 +1,7 @@
 package com.latif.ecommercebackend.exceptions;
 
 import com.latif.ecommercebackend.model.ResponseWrapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import java.util.*;
 
@@ -53,6 +55,31 @@ public class GlobalExceptionsHandler {
                         .message(exception.getMessage())
                         .status(HttpStatus.CONFLICT)
                         .success(false)
+                        .build(),
+                HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(UserNotVerifiedException.class)
+    public ResponseEntity<ResponseWrapper> userNotVerifiedException(UserNotVerifiedException exception) {
+
+        return new ResponseEntity<>(
+                ResponseWrapper.builder()
+                        .message((exception.isNewEmailSent())? "User not verified, Email resent": "User not verified")
+                        .status(HttpStatus.CONFLICT)
+                        .success(false)
+                        .build(),
+                HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(EmailFailureException.class)
+    public ResponseEntity<ResponseWrapper> emailFailureException(EmailFailureException exception) {
+
+        return new ResponseEntity<>(
+                ResponseWrapper.builder()
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .message(exception.getMessage())
                         .build(),
                 HttpStatus.CONFLICT
         );

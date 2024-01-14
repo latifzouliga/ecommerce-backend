@@ -27,7 +27,7 @@ public class JwtServiceImpl implements JwtService {
     private Algorithm algorithm;
 
     private static final String USERNAME_KEY = "USERNAME";
-    private static final String EMAIL_KEY = "EMAIL";
+    private static final String EMAIL_KEY = "email";
 
     @PostConstruct
     public void postConstruct(){

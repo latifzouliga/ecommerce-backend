@@ -4,6 +4,8 @@ import com.latif.ecommercebackend.dto.LoginBody;
 import com.latif.ecommercebackend.dto.LoginResponse;
 import com.latif.ecommercebackend.dto.RegistrationBody;
 import com.latif.ecommercebackend.exceptions.EcommerceProjectException;
+import com.latif.ecommercebackend.exceptions.EmailFailureException;
+import com.latif.ecommercebackend.exceptions.UserNotVerifiedException;
 import com.latif.ecommercebackend.model.LocalUser;
 import com.latif.ecommercebackend.model.ResponseWrapper;
 import com.latif.ecommercebackend.service.UserService;
@@ -33,7 +35,7 @@ public class AuthenticationController {
     }
      */
     @PostMapping("/register")
-    public ResponseEntity<ResponseWrapper> registerUser(@Valid @RequestBody RegistrationBody registrationBody) throws EcommerceProjectException {
+    public ResponseEntity<ResponseWrapper> registerUser(@Valid @RequestBody RegistrationBody registrationBody) throws EcommerceProjectException, EmailFailureException {
 
         RegistrationBody user = userService.registerUser(registrationBody);
         return ResponseEntity
@@ -56,16 +58,18 @@ public class AuthenticationController {
      }
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody) throws EcommerceProjectException {
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody) throws UserNotVerifiedException, EmailFailureException, EcommerceProjectException {
 
-        String jwt = userService.LoginUser(loginBody);
 
+       String jwt = userService.LoginUser(loginBody);
         if (jwt == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         LoginResponse response = new LoginResponse();
         response.setJwt(jwt);
+        response.setSuccess(true);
         return ResponseEntity.ok(response);
+
 
     }
 
@@ -76,4 +80,27 @@ public class AuthenticationController {
 //        LocalUser localUser = (LocalUser) SecurityContextHolder.getContext().getAuthentication().getCredentials();
         return user;
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity verifyEmail(@RequestParam String token){
+        if (userService.verifyUser(token)){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

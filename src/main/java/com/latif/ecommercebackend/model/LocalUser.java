@@ -1,15 +1,12 @@
 package com.latif.ecommercebackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "local_user")
@@ -43,15 +40,13 @@ public class LocalUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@OrderBy("id desc")
-    //private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Column(name = "email_verified", nullable = false)
-    private Boolean emailVerified = false;
+    private Boolean isEmailVerified = false;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id desc")
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
 }

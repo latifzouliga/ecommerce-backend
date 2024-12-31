@@ -4,7 +4,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce-backend
+    url: jdbc:postgresql://ecommerce-backend-ps-db-1:5432/ecommerce-backend
     username: postgres
     password: admin
 
@@ -25,7 +25,7 @@ spring:
   application:
       name: e-commerce
 
-# SMTP Contiguration, how spring connects to SMTP
+# SMTP Configuration, how spring connects to SMTP
   mail:
     host: localhost
     port: 2525

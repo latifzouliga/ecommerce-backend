@@ -1,0 +1,43 @@
+version: "3.9" # Use a recent version of the Docker Compose file format
+
+services:
+
+#  ecommerce_backed:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres-db
+#      - smtp-server
+#    networks:
+#      - ecommerce_net
+
+  ps-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ecommerce-backend
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - ecommerce_net
+
+  smtp-server:
+    image: rnwood/smtp4dev
+    ports:
+      - "2525:25"
+      - "3000:80"
+    restart: always
+
+#networks:
+#    ecommerce_net:
+#      driver: bridge
+
+
+volumes:
+  postgres_data:

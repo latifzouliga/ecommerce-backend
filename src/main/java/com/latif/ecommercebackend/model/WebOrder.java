@@ -20,7 +20,7 @@ public class WebOrder {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private LocalUser user;
+    private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "address_id", nullable = false)

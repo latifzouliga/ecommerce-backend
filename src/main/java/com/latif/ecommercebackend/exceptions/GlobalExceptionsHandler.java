@@ -85,5 +85,16 @@ public class GlobalExceptionsHandler {
         );
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ResponseWrapper> userNotFoundException(UserNotFoundException exception) {
+
+        return new ResponseEntity<>(
+                ResponseWrapper.builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .message(exception.getMessage())
+                        .build(),
+                HttpStatus.CONFLICT
+        );
+    }
 
 }

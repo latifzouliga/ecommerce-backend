@@ -1,8 +1,8 @@
 package com.latif.ecommercebackend.securityConfig;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.latif.ecommercebackend.model.LocalUser;
-import com.latif.ecommercebackend.repository.LocalUserRepository;
+import com.latif.ecommercebackend.model.User;
+import com.latif.ecommercebackend.repository.UserRepository;
 import com.latif.ecommercebackend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,9 +22,9 @@ import java.util.Optional;
 public class JWTRequestFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final LocalUserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public JWTRequestFilter(JwtService jwtService, LocalUserRepository userRepository) {
+    public JWTRequestFilter(JwtService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
@@ -47,9 +47,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             String token = tokenHeader.substring(7);
             try {
                 String username = jwtService.getUsername(token);
-                Optional<LocalUser> opUser = userRepository.findByUsernameIgnoreCase(username);
+                Optional<User> opUser = userRepository.findByUsernameIgnoreCase(username);
                 if (opUser.isPresent()) {
-                    LocalUser user = opUser.get();
+                    User user = opUser.get();
                     // build authentication object
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
 

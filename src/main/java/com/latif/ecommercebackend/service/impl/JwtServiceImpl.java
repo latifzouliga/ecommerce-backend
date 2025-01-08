@@ -2,7 +2,7 @@ package com.latif.ecommercebackend.service.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.latif.ecommercebackend.model.LocalUser;
+import com.latif.ecommercebackend.model.User;
 import com.latif.ecommercebackend.service.JwtService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class JwtServiceImpl implements JwtService {
         algorithm = Algorithm.HMAC256(algorithmKey);
     }
 
-    public String generateJWT(LocalUser user){
+    public String generateJWT(User user){
         return JWT.create()
                 .withClaim(USERNAME_KEY,user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000L * expiryInSecond)))
@@ -49,7 +49,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateVerifiedJWT(LocalUser user) {
+    public String generateVerifiedJWT(User user) {
         return JWT.create()
                 .withClaim(EMAIL_KEY,user.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000L * expiryInSecond)))

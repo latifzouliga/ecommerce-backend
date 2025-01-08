@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "local_user")
 @Getter
 @Setter
-public class LocalUser {
+public class User {
 
 
     @Id
@@ -49,4 +49,15 @@ public class LocalUser {
     @OrderBy("id desc")
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
+
+    // TODO: remove this method
+    @Override
+    public String toString() {
+        return "LocalUser{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

@@ -1,11 +1,11 @@
 package com.latif.ecommercebackend.service;
 
-import com.latif.ecommercebackend.model.LocalUser;
+import com.latif.ecommercebackend.model.User;
 
 public interface JwtService {
 
-    String generateJWT(LocalUser user);
+    String generateJWT(User user);
     String getUsername(String token);
 
-    String generateVerifiedJWT(LocalUser user);
+    String generateVerifiedJWT(User user);
 }

@@ -1,6 +1,6 @@
 package com.latif.ecommercebackend.controller;
 
-import com.latif.ecommercebackend.model.LocalUser;
+import com.latif.ecommercebackend.model.User;
 import com.latif.ecommercebackend.model.ResponseWrapper;
 import com.latif.ecommercebackend.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class OrderController {
 
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper> getOrders(@AuthenticationPrincipal LocalUser user){
+    public ResponseEntity<ResponseWrapper> getOrders(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(
                 ResponseWrapper.builder()
                         .status(HttpStatus.OK)

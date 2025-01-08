@@ -1,6 +1,6 @@
 package com.latif.ecommercebackend.service.impl;
 
-import com.latif.ecommercebackend.model.LocalUser;
+import com.latif.ecommercebackend.model.User;
 import com.latif.ecommercebackend.model.WebOrder;
 import com.latif.ecommercebackend.repository.WebOrderRepository;
 import com.latif.ecommercebackend.service.OrderService;
@@ -18,7 +18,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<WebOrder> getOrders(LocalUser user) {
+    public List<WebOrder> getOrders(User user) {
         return webOrderRepository.findByUser(user);
     }
 }

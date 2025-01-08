@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,7 +27,7 @@ public class VerificationToken {
     /** The user this verification token is for. */
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private LocalUser user;
+    private User user;
 
 
 }

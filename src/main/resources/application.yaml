@@ -4,7 +4,7 @@
 
 spring:
   datasource:
-    url: jdbc:postgresql://ecommerce-backend-ps-db-1:5432/ecommerce-backend
+    url: jdbc:postgresql://localhost:5432/ecommerce-backend
     username: postgres
     password: admin
 
@@ -50,7 +50,7 @@ email:
 
 app:
   frontend:
-    url: http://ecommerce.com
-
+#    url: http://ecommerce.com
+    url: http://localhost:8080
 
 

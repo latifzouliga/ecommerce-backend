@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService {
                     boolean outDatedToken = verificationTokens.get(0)
                             .getCreatedTimestamp()
                             .before(
-//                                    Timestamp.from(Instant.now().minus(1, ChronoUnit.SECONDS))
-                                    new Timestamp(System.currentTimeMillis() - 1000 * 60)
+//                                    Timestamp.from(Instant.now().minus(1, ChronoUnit.HOURS))
+                                    new Timestamp(System.currentTimeMillis() - 1000 * 60 * 60)
                             );
                     // if no verification is sent OR if verification is outdated by one hour
                     boolean resend = verificationTokens.isEmpty() || outDatedToken;

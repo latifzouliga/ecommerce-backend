@@ -37,6 +37,7 @@ public class JwtServiceImpl implements JwtService {
     public String generateJWT(User user){
         return JWT.create()
                 .withClaim(USERNAME_KEY,user.getUsername())
+                .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000L * expiryInSecond)))
                 .withIssuer(issuer)
                 .sign(algorithm);
@@ -52,6 +53,7 @@ public class JwtServiceImpl implements JwtService {
     public String generateVerifiedJWT(User user) {
         return JWT.create()
                 .withClaim(EMAIL_KEY,user.getEmail())
+                .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000L * expiryInSecond)))
                 .withIssuer(issuer)
                 .sign(algorithm);

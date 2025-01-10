@@ -45,7 +45,7 @@ public class AuthenticationController {
                         ResponseWrapper.builder()
                                 .success(true)
                                 .status(HttpStatus.CREATED)
-                                .message("User registration successful")
+                                .message("User registration successful: Please check your email to verify your account")
                                 .data(user)
                                 .build()
                 );

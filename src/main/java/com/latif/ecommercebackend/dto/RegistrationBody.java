@@ -3,6 +3,7 @@ package com.latif.ecommercebackend.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -12,11 +13,25 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record RegistrationBody(
 
+        @Schema(example = "John")
+        @NotNull
+        @NotBlank
+        @Size(min = 2, max = 255)
+        String firstName,
+
+        @Schema(example = "Doe")
+        @NotNull
+        @NotBlank
+        @Size(min = 2, max = 255)
+        String lastName,
+
+        @Schema(example = "johndoe")
         @NotNull
         @NotBlank
         @Size(min = 2, max = 255)
         String username,
 
+        @Schema(example = "example@email.com")
         @Email
         @NotNull
         @NotBlank
@@ -28,16 +43,6 @@ public record RegistrationBody(
         @NotBlank
         @Size(min = 6, max = 255)
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$")
-        String password,
-
-        @NotNull
-        @NotBlank
-        @Size(min = 2, max = 255)
-        String firstName,
-
-        @NotNull
-        @NotBlank
-        @Size(min = 2, max = 255)
-        String lastName
+        String password
 ) {
 }

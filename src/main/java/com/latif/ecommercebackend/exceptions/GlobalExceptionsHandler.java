@@ -39,11 +39,11 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(
                 ResponseWrapper.builder()
                         .success(false)
-                        .status(HttpStatus.CONFLICT)
+                        .status(HttpStatus.BAD_REQUEST)
                         .message("Validation error")
                         .data(validationErrorList)
                         .build(),
-                HttpStatus.CONFLICT);
+                HttpStatus.BAD_REQUEST);
     }
 
     // custom exception
@@ -66,10 +66,10 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(
                 ResponseWrapper.builder()
                         .message((exception.isNewEmailSent())? "User not verified, Email resent": "User not verified")
-                        .status(HttpStatus.CONFLICT)
+                        .status(HttpStatus.FORBIDDEN)
                         .success(false)
                         .build(),
-                HttpStatus.CONFLICT
+                HttpStatus.FORBIDDEN
         );
     }
 
@@ -81,7 +81,7 @@ public class GlobalExceptionsHandler {
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .message(exception.getMessage())
                         .build(),
-                HttpStatus.CONFLICT
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 
@@ -91,6 +91,18 @@ public class GlobalExceptionsHandler {
         return new ResponseEntity<>(
                 ResponseWrapper.builder()
                         .status(HttpStatus.NOT_FOUND)
+                        .message(exception.getMessage())
+                        .build(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ResponseWrapper> otherException(RuntimeException exception) {
+
+        return new ResponseEntity<>(
+                ResponseWrapper.builder()
+                        .status(HttpStatus.CONFLICT)
                         .message(exception.getMessage())
                         .build(),
                 HttpStatus.CONFLICT

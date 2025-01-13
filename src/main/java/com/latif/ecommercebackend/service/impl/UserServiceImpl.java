@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final EncryptionService encryptionService;
-    private final MapperUtil mapper;
     private final JwtService jwtService;
     private final EmailServiceImpl emailService;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -40,7 +39,6 @@ public class UserServiceImpl implements UserService {
                            VerificationTokenRepository verificationTokenRepository) {
         this.userRepository = userRepository;
         this.encryptionService = encryptionService;
-        this.mapper = mapper;
         this.jwtService = jwtService;
         this.emailService = emailService;
         this.verificationTokenRepository = verificationTokenRepository;
@@ -50,13 +48,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public RegistrationBody registerUser(RegistrationBody registrationBody) throws EcommerceProjectException, EmailFailureException {
 
-        if (userRepository.findByEmailIgnoreCase(registrationBody.email()).isPresent() ||
-                userRepository.findByUsernameIgnoreCase(registrationBody.username()).isPresent()
-        ) {
+        boolean isEmailExist = userRepository.findByEmailIgnoreCase(registrationBody.email()).isPresent();
+        boolean isUsernameExist = userRepository.findByUsernameIgnoreCase(registrationBody.username()).isPresent();
+
+        // check if email or username already exists in database
+        if (isEmailExist || isUsernameExist) {
             throw new EcommerceProjectException("User already exists");
         }
 
-//        LocalUser user = mapper.convert(registrationBody, LocalUser.class);
 
         User user = new User();
         user.setFirstName(registrationBody.firstName());
@@ -70,6 +69,7 @@ public class UserServiceImpl implements UserService {
         VerificationToken verificationToken = createVerificationToken(user);
         emailService.sendVerificationEmail(verificationToken);
 //        verificationTokenRepository.save(verificationToken);
+        // token will be saved in database. handled by cascadeType.ALL
         userRepository.save(user);
         return registrationBody;
 
@@ -84,40 +84,47 @@ public class UserServiceImpl implements UserService {
         return verificationToken;
     }
 
+
     @Override
     public String LoginUser(LoginBody loginBody) throws UserNotVerifiedException, EmailFailureException, UserNotFoundException {
 
-        // check if user exists in database
+        // Check if user exists
         Optional<User> opUser = userRepository.findByUsernameIgnoreCase(loginBody.username());
-
-        if (opUser.isPresent()) {   // if user is valid
-            User user = opUser.get();
-            // verify login password is the same as the password in database
-            if (encryptionService.verifyPassword(loginBody.password(), user.getPassword())) {
-                if (user.getIsEmailVerified()) {  // if email is verified continue as normal
-                    return jwtService.generateJWT(user);
-                } else { // if email is not verified
-                    List<VerificationToken> verificationTokens = user.getVerificationTokens();
-
-                    boolean outDatedToken = verificationTokens.get(0)
-                            .getCreatedTimestamp()
-                            .before(
-//                                    Timestamp.from(Instant.now().minus(1, ChronoUnit.SECONDS))
-                                    new Timestamp(System.currentTimeMillis() - 1000 * 60)
-                            );
-                    // if no verification is sent OR if verification is outdated by one hour
-                    boolean resend = verificationTokens.isEmpty() || outDatedToken;
-
-                    if (resend) { // resend new verification email
-                        VerificationToken verificationToken = createVerificationToken(user);
-                        verificationTokenRepository.save(verificationToken);
-                        emailService.sendVerificationEmail(verificationToken);
-                    }
-                    throw new UserNotVerifiedException(resend);
-                }
-            }
+        if (opUser.isEmpty()) {
+            throw new UserNotFoundException("User not found");
         }
-        throw new UserNotFoundException("User not found");
+        User user = opUser.get();
+
+        // Verify password
+        if (!encryptionService.verifyPassword(loginBody.password(), user.getPassword())) {
+            throw new RuntimeException("Wrong password");
+        }
+
+        // Check email verification
+        if (!user.getIsEmailVerified()) {
+            handleUnverifiedEmail(user);
+        }
+
+        return jwtService.generateJWT(user);
+    }
+
+    private void handleUnverifiedEmail(User user) throws UserNotVerifiedException, EmailFailureException {
+        List<VerificationToken> verificationTokens = user.getVerificationTokens();
+
+        boolean outDatedToken = verificationTokens.get(0)
+                .getCreatedTimestamp()
+                .before(new Timestamp(System.currentTimeMillis() - 1000 * 60 * 60));
+
+
+        boolean resend = verificationTokens.isEmpty() || outDatedToken;
+
+        // check token date is valid and token is not empty
+        if (!resend) {
+            VerificationToken verificationToken = createVerificationToken(user);
+            verificationTokenRepository.save(verificationToken);
+            emailService.sendVerificationEmail(verificationToken);
+        }
+        throw new UserNotVerifiedException(resend);
 
     }
 
@@ -127,24 +134,25 @@ public class UserServiceImpl implements UserService {
         // find token in database
         Optional<VerificationToken> opToken = verificationTokenRepository.findByToken(token);
 
-        if (opToken.isPresent()) {
-            VerificationToken verificationToken = opToken.get();
-            User user = verificationToken.getUser(); // get user from token
-
-            if (!user.getIsEmailVerified()) {
-                user.setIsEmailVerified(true);
-                userRepository.save(user);
-                verificationTokenRepository.deleteByUser(user); // delete all existing tokens because we don't need them after the user is verified
-
-            }
-
-        } else {
+        if (opToken.isEmpty()) {
             throw new UserNotVerifiedException(false);
         }
 
+
+        VerificationToken verificationToken = opToken.get();
+        User user = verificationToken.getUser(); // get user from token
+
+        if (!user.getIsEmailVerified()) {
+            user.setIsEmailVerified(true);
+            userRepository.save(user);
+            // delete all existing tokens because we don't need them after the user is verified
+            verificationTokenRepository.deleteByUser(user);
+
+        }
+
+
     }
 }
-
 
 
 

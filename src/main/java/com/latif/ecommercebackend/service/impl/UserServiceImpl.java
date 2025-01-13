@@ -145,7 +145,8 @@ public class UserServiceImpl implements UserService {
         if (!user.getIsEmailVerified()) {
             user.setIsEmailVerified(true);
             userRepository.save(user);
-            verificationTokenRepository.deleteByUser(user); // delete all existing tokens because we don't need them after the user is verified
+            // delete all existing tokens because we don't need them after the user is verified
+            verificationTokenRepository.deleteByUser(user);
 
         }
 
